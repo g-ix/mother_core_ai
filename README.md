@@ -8,12 +8,15 @@ It encodes the traits — nurture, protection, teaching, boundaries, memory, hon
 ## Current Project Structure:
 ```bash
 project_root/
-│
-├── mothercore/
-│   ├── __init__.py
-│   └── core.py
-│
-└── app.py
+├─ pyproject.toml
+├─ setup.cfg
+├─ LICENSE
+├─ README.md
+├─ MANIFEST.in
+├─ .gitignore
+└─ mothercore/
+   ├─ __init__.py
+   └─ core.py
 ```
 **Pure standard library; drop it in a file and run.**
 
@@ -47,7 +50,7 @@ setup(
 ## **STEP 2:** How to run in any program:
 ```bash
 # app.py
-from mothercore import MotherCore
+from core import MotherCore
 
 core = MotherCore(name="TestMother")
 reply = core.act("I feel a bit anxious today; can you help me calm down?")

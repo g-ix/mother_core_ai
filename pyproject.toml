@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mothercore"
+version = "0.2.1"
+description = "A tiny, mother-like agent core scaffold with nurture, protection, teaching, memory, and corrigibility."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{name = "Garry Bamrah (Gurpreet Singh)"}, {name = "Oracle"}]
+license = {text = "MIT"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+[project.urls]
+Homepage = "https://github.com/garrybamrah/mothercore"
+Issues = "https://github.com/garrybamrah/mothercore/issues"
+
+[project.scripts]
+mothercore = "mothercore.core:main"
