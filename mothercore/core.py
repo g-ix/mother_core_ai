@@ -21,20 +21,51 @@ from __future__ import annotations
 import json, os, sys, time, uuid, math, random, textwrap, datetime
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple, Callable, Iterable
+import atexit
 
 # ----------------------------- Config & Constants -----------------------------
 
 APP_NAME = "MotherCore"
 VERSION = "0.2.1"
-DATA_DIR = os.path.join(os.path.expanduser("~"), ".mothercore")
+# Store data inside the folder that contains this script (e.g., /Users/.../mothercore)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, ".mothercore")  # create/use .mothercore inside your project folder
 os.makedirs(DATA_DIR, exist_ok=True)
 
-AUDIT_LOG = os.path.join(DATA_DIR, "audit.log.jsonl")
-MEM_FILE  = os.path.join(DATA_DIR, "memory.jsonl")
+def _iso_stamp() -> str:
+    # safe for filenames
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+def _path_with_timestamp_if_exists(filename: str) -> str:
+    """
+    If DATA_DIR/filename already exists, return a timestamped variant:
+    NAME_YYYYmmddThhmmssZ.EXT
+    """
+    base = os.path.join(DATA_DIR, filename)
+    if os.path.exists(base):
+        stem, ext = os.path.splitext(filename)
+        return os.path.join(DATA_DIR, f"{stem}_{_iso_stamp()}{ext}")
+    return base
+
+# If an older file exists, create a new one with a timestamp suffix
+AUDIT_LOG = _path_with_timestamp_if_exists("audit.log.jsonl")
+MEM_FILE  = _path_with_timestamp_if_exists("memory.jsonl")
+
+# Constitution is optional-on-disk: do NOT create it unless you explicitly write it later
 CONF_FILE = os.path.join(DATA_DIR, "constitution.json")
 
 def now_iso() -> str:
     return datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+
+def _maybe_remove_empty_data_dir():
+    try:
+        # Delete the folder ONLY if it exists and is truly empty
+        if os.path.isdir(DATA_DIR) and not os.listdir(DATA_DIR):
+            os.rmdir(DATA_DIR)
+    except Exception:
+        pass  # best-effort cleanup
+
+atexit.register(_maybe_remove_empty_data_dir)
 
 # ----------------------------- Constitution ----------------------------------
 
@@ -73,8 +104,8 @@ def load_or_init_constitution(path: str = CONF_FILE) -> Dict[str, Any]:
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(DEFAULT_CONSTITUTION, f, indent=2)
+    # with open(path, "w", encoding="utf-8") as f:
+    #     json.dump(DEFAULT_CONSTITUTION, f, indent=2)
     return DEFAULT_CONSTITUTION
 
 CONSTITUTION = load_or_init_constitution()
@@ -478,6 +509,14 @@ class MotherCore:
     def propose_plan(self, goal: str) -> Plan:
         plan = PLANNER.propose(goal)
         write_audit({"type":"plan_proposed", "plan": asdict(plan)})
+        # Save the plan as a standalone file: plan_<id>_<timestamp>.json
+        _plan_path = os.path.join(DATA_DIR, f"plan_{plan.id}_{_iso_stamp()}.json")
+        try:
+            with open(_plan_path, "w", encoding="utf-8") as f:
+                json.dump(asdict(plan), f, ensure_ascii=False, indent=2)
+        except Exception:
+            # Non-fatal: if this fails, audit log still has the plan
+            pass
         return plan
 
     def approve_plan(self, plan: Plan, oversight_token: Optional[str]) -> Plan:

@@ -15,6 +15,8 @@ project_root/
 ├─ MANIFEST.in
 ├─ .gitignore
 └─ mothercore/
+   └─ .mothercore/ (ONLY AFTER core.py execution AND files existence) !!! EMPTY FOLDER WILL BE DISCARDED
+      ├─ YOUR_FILES_HERE
    ├─ __init__.py
    └─ core.py
 ```
@@ -75,7 +77,15 @@ if __name__ == "__main__":
 
 Then you can run:
 ```bash
-> python -m mothercore.core
+# (optional commands)
+> pwd
+# should return --> **your_computer_path/**/mothercore**
+
+> ls
+# __init__.py core.py
+
+# RUN DIRECTLY if you are in correct folder.
+> python3 core.py
 ```
 
 ## STEP 3: (OPTIONAL) Version control:
