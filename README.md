@@ -22,7 +22,7 @@ project_root/
 
 # Further Steps to understand and implement:
 
-## **STEP 1:** How to install or reference it:
+## STEP 1: How to install or reference it:
 
 ### Option A – Local import
 ```bash
@@ -47,7 +47,7 @@ setup(
 ```
 
 
-## **STEP 2:** How to run in any program:
+## STEP 2: How to run in any program:
 ```bash
 # app.py
 from core import MotherCore
@@ -78,7 +78,7 @@ Then you can run:
 > python -m mothercore.core
 ```
 
-## **STEP 3:** (OPTIONAL) Version control:
+## STEP 3: (OPTIONAL) Version control:
 If you want to keep improving the core:
 ```bash
 > git init
@@ -92,6 +92,11 @@ Then you can import it from any of your future projects with:
 ```
 
 ## Quick notes:
-•	*Traits baked in:* nurture (skill_nurture), protection (skill_protect + risk model), teaching (skill_teach), boundaries (skill_boundaries), memory (MemoryStore), honesty (uncertainty disclosure), corrigibility (pause/resume/shutdown treating shutdown as value-neutral).
-•	*Safety bias:* reversible-first planning, oversight requirement above a risk threshold, constitutional principles, and a guardian that blocks risky intents.
-•	*Extensible:* add new “skills” via SKILLS.register("name", fn); swap the toy risk heuristic with real classifiers later.
+•	**Traits baked in:** nurture (skill_nurture), protection (skill_protect + risk model), teaching (skill_teach), boundaries (skill_boundaries), memory (MemoryStore), honesty (uncertainty disclosure), corrigibility (pause/resume/shutdown treating shutdown as value-neutral).
+
+•	**Safety bias:** reversible-first planning, oversight requirement above a risk threshold, constitutional principles, and a guardian that blocks risky intents.
+
+•	**Extensible:** add new “skills” via SKILLS.register("name", fn); swap the toy risk heuristic with real classifiers later.
+
+## LICENSE
+MIT
