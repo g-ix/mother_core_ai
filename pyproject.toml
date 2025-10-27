@@ -8,7 +8,7 @@ version = "0.2.1"
 description = "A tiny, mother-like agent core scaffold with nurture, protection, teaching, memory, and corrigibility."
 readme = "README.md"
 requires-python = ">=3.9"
-authors = [{name = "Garry Bamrah (Gurpreet Singh)"}, {name = "Oracle"}]
+authors = [{name = "Garry Bamrah"}, {name = "Oracle"}]
 license = {text = "MIT"}
 classifiers = [
   "Programming Language :: Python :: 3",
